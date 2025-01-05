@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Hotel Al-rim</title>
+    <link rel="stylesheet" href="/assets/welcome.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <h1>Hotel Al-rim</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#rooms">Rooms</a></li>
+                <li><a href="#booking">Book Now</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Welcome Section -->
+    <section class="welcome-section" id="home">
+        <div class="welcome-message">
+            <h2>Welcome to Hotel Al-Rim</h2>
+            <p>Your comfort, our priority. Enjoy luxury accommodations and unforgettable service.</p>
+            <a href="#booking" class="btn">Book Your Stay</a>
+        </div>
+        <div class="image">
+            <img src="/images/hotel-image.jpg" alt="Hotel Lobby">
+        </div>
+    </section>
+
+    <!-- Rooms Section -->
+    <section id="rooms">
+        <h2>Our Rooms</h2>
+        <p>Choose from a variety of room types for an unforgettable stay.</p>
+        <div class="room-cards">
+            <div class="room-card">
+                <img src="images/room1.jpg" alt="Luxury Suite">
+                <h3>Luxury Suite</h3>
+                <p>Experience the best in luxury with spacious rooms and premium amenities.</p>
+            </div>
+            <div class="room-card">
+                <img src="/images/room2.jpg" alt="Standard Room">
+                <h3>Standard Room</h3>
+                <p>Comfort and elegance at a reasonable price.</p>
+            </div>
+            <div class="room-card">
+                <img src="/images/room3.jpg" alt="Deluxe Room">
+                <h3>Deluxe Room</h3>
+                <p>Perfect for those looking for extra space and special features.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+<section id="booking">
+    <h2>Book Your Stay</h2>
+    <p>Fill out the form below to reserve your room:</p>
+    <form action="/book" method="POST" class="booking-form">
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+        
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        
+        <label for="checkin">Check-In Date:</label>
+        <input type="date" id="checkin" name="checkin" required>
+        
+        <label for="checkout">Check-Out Date:</label>
+        <input type="date" id="checkout" name="checkout" required>
+        
+        <label for="room-type">Room Type:</label>
+        <select id="room-type" name="room-type" required>
+            <option value="luxury-suite">Luxury Suite</option>
+            <option value="standard-room">Standard Room</option>
+            <option value="deluxe-room">Deluxe Room</option>
+        </select>
+        
+        <label for="guests">Number of Guests:</label>
+        <input type="number" id="guests" name="guests" min="1" placeholder="Enter number of guests" required>
+        
+        <button type="submit" class="btn">Reserve Now</button>
+    </form>
+</section>
+
+<style>
+    /* Booking Section */
+    #booking {
+        background-color: #f7f7f7;
+        padding: 40px;
+        margin: 20px auto;
+        width: 80%;
+        max-width: 800px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #booking h2 {
+        text-align: center;
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    #booking p {
+        text-align: center;
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        color: #555;
+    }
+
+    .booking-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .booking-form label {
+        font-size: 1rem;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    .booking-form input,
+    .booking-form select {
+        padding: 10px;
+        margin-bottom: 20px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+    .booking-form input[type="number"] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    .booking-form button {
+        padding: 15px;
+        font-size: 1.1rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .booking-form button:hover {
+        background-color: #0056b3;
+    }
+
+    .booking-form input:focus,
+    .booking-form select:focus,
+    .booking-form button:focus {
+        outline: none;
+        border-color: #0056b3;
+    }
+</style>
+
+<script>
+    // Check if the "success" parameter is in the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('success') === 'true') {
+        alert("Booking Successful! Thank you for your reservation.");
+    }
+</script>
+<!-- Contact Section -->
+<section id="contact">
+    <h2>Contact Us</h2>
+    <p>If you have any questions, feel free to reach out to us using the form below:</p>
+    <form action="/submit-contact" method="POST" class="contact-form">
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+        
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" placeholder="Enter subject" required>
+        
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="4" placeholder="Enter your message" required></textarea>
+        
+        <button type="submit" class="btn">Send Message</button>
+    </form>
+</section>
+
+<style>
+    /* Contact Section */
+    #contact {
+        background-color: #fff;
+        padding: 40px;
+        margin: 20px auto;
+        width: 80%;
+        max-width: 800px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #contact h2 {
+        text-align: center;
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    #contact p {
+        text-align: center;
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        color: #555;
+    }
+
+    .contact-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .contact-form label {
+        font-size: 1rem;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+        padding: 10px;
+        margin-bottom: 20px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+    .contact-form textarea {
+        resize: vertical;
+    }
+
+    .contact-form button {
+        padding: 15px;
+        font-size: 1.1rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .contact-form button:hover {
+        background-color: #0056b3;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus,
+    .contact-form button:focus {
+        outline: none;
+        border-color: #0056b3;
+    }
+</style>
+<!-- Contact Section -->
+<section id="contact">
+    <h2>Contact Us</h2>
+    
+    <div class="contact-details">
+        <p><strong>Address:</strong> 35, rue france, mohammedia</p>
+        <p><strong>Phone:</strong> +212 6 43 89 15 46</p>
+        <p><strong>Email:</strong> <a href="gmail:rimjabal2004@gmail.com">info@alrim.com</a></p>
+        
+    </div>
+
+    
+
+    <div class="social-links">
+        <h3>Follow Us</h3>
+        <ul>
+            <li><a href="https://www.instagram.com/alrim_hotel/" target="_blank">Instagram</a></li>
+        </ul>
+    </div>
+    
+</section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2025 Hotel XYZ. All rights reserved.</p>
+    </footer>
+</body>
+</html>
