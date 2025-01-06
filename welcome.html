@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Hotel Al-rim</title>
+    <title>Welcome to Hotel Al-Rim</title>
     <link rel="stylesheet" href="/assets/welcome.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
     <header>
         <nav class="navbar">
             <div class="logo">
-                <h1>Hotel Al-rim</h1>
+                <h1>Hotel Al-Rim</h1>
             </div>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
@@ -23,71 +23,126 @@
     </header>
 
     <!-- Welcome Section -->
-    <section class="welcome-section" id="home">
-        <div class="welcome-message">
-            <h2>Welcome to Hotel Al-Rim</h2>
-            <p>Your comfort, our priority. Enjoy luxury accommodations and unforgettable service.</p>
-            <a href="#booking" class="btn">Book Your Stay</a>
-        </div>
-        <div class="image">
-            <img src="/images/hotel-image.jpg" alt="Hotel Lobby">
-        </div>
-    </section>
+    <main>
+        <section class="welcome-section" id="home">
+            <div class="welcome-message">
+                <h2>Welcome to Hotel Al-Rim</h2>
+                <p>Your comfort, our priority. Enjoy luxury accommodations and unforgettable service.</p>
+                <a href="#booking" class="btn">Book Your Stay</a>
+            </div>
+            <div class="image">
+                <img src="/images/hotel-image.jpg" alt="Hotel Lobby">
+            </div>
+        </section>
 
-    <!-- Rooms Section -->
-    <section id="rooms">
-        <h2>Our Rooms</h2>
-        <p>Choose from a variety of room types for an unforgettable stay.</p>
-        <div class="room-cards">
-            <div class="room-card">
-                <img src="images/room1.jpg" alt="Luxury Suite">
-                <h3>Luxury Suite</h3>
-                <p>Experience the best in luxury with spacious rooms and premium amenities.</p>
+        <!-- Rooms Section -->
+        <section id="rooms">
+            <h2>Our Rooms</h2>
+            <p>Choose from a variety of room types for an unforgettable stay.</p>
+            <div class="room-cards">
+                <div class="room-card">
+                    <img src="/images/room1.jpg" alt="Luxury Suite">
+                    <h3>Luxury Suite</h3>
+                    <p>Experience the best in luxury with spacious rooms and premium amenities.</p>
+                </div>
+                <div class="room-card">
+                    <img src="/images/room2.jpg" alt="Standard Room">
+                    <h3>Standard Room</h3>
+                    <p>Comfort and elegance at a reasonable price.</p>
+                </div>
+                <div class="room-card">
+                    <img src="/images/room3.jpg" alt="Deluxe Room">
+                    <h3>Deluxe Room</h3>
+                    <p>Perfect for those looking for extra space and special features.</p>
+                </div>
             </div>
-            <div class="room-card">
-                <img src="/images/room2.jpg" alt="Standard Room">
-                <h3>Standard Room</h3>
-                <p>Comfort and elegance at a reasonable price.</p>
-            </div>
-            <div class="room-card">
-                <img src="/images/room3.jpg" alt="Deluxe Room">
-                <h3>Deluxe Room</h3>
-                <p>Perfect for those looking for extra space and special features.</p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Booking Section -->
-<section id="booking">
-    <h2>Book Your Stay</h2>
-    <p>Fill out the form below to reserve your room:</p>
-    <form action="/book" method="POST" class="booking-form">
-        <label for="name">Full Name:</label>
-        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
-        
-        <label for="email">Email Address:</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email" required>
-        
-        <label for="checkin">Check-In Date:</label>
-        <input type="date" id="checkin" name="checkin" required>
-        
-        <label for="checkout">Check-Out Date:</label>
-        <input type="date" id="checkout" name="checkout" required>
-        
-        <label for="room-type">Room Type:</label>
-        <select id="room-type" name="room-type" required>
-            <option value="luxury-suite">Luxury Suite</option>
-            <option value="standard-room">Standard Room</option>
-            <option value="deluxe-room">Deluxe Room</option>
-        </select>
-        
-        <label for="guests">Number of Guests:</label>
-        <input type="number" id="guests" name="guests" min="1" placeholder="Enter number of guests" required>
-        
-        <button type="submit" class="btn">Reserve Now</button>
-    </form>
+        <!-- Booking Section -->
+        <section id="booking">
+            <h2>Book Your Stay</h2>
+            <p>Fill out the form below to reserve your room:</p>
+            <form action="/book" method="POST" class="booking-form">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                
+                <label for="checkin">Check-In Date:</label>
+                <input type="date" id="checkin" name="checkin" required>
+                
+                <label for="checkout">Check-Out Date:</label>
+                <input type="date" id="checkout" name="checkout" required>
+                
+                <label for="room-type">Room Type:</label>
+                <select id="room-type" name="room-type" required>
+                    <option value="luxury-suite">Luxury Suite</option>
+                    <option value="standard-room">Standard Room</option>
+                    <option value="deluxe-room">Deluxe Room</option>
+                </select>
+                
+                <label for="guests">Number of Guests:</label>
+                <input type="number" id="guests" name="guests" min="1" placeholder="Enter number of guests" required>
+                
+                <button type="submit" class="btn">Reserve Now</button>
+            </form>
+        </section>
+
+        <!-- Manage Bookings Section -->
+        <section id="manage-bookings">
+            <h2>Manage Your Bookings</h2>
+            <p>Enter your email to fetch your bookings:</p>
+            <input type="email" id="email1" placeholder="Enter your email" required>
+            <button id="fetch-bookings" class="btn">Fetch Bookings</button>
+            <div id="booking-list"></div>
+        </section>
+    <!-- JavaScript for Bookings -->
+    
+
+
+<style>#manage-bookings {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin: 20px auto;
+    width: 80%;
+    border-radius: 8px;
+}
+
+.booking-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.booking-item button {
+    margin-right: 10px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.update-btn {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.update-btn:hover {
+    background-color: #0056b3;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+</style>   
 </section>
-
 <style>
     /* Booking Section */
     #booking {
@@ -289,7 +344,111 @@
 
     <!-- Footer Section -->
     <footer>
-        <p>© 2025 Hotel XYZ. All rights reserved.</p>
+        <p>© 2025 Hotel Al-Rim. All rights reserved.</p>
     </footer>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const emailInput = document.getElementById("email1");
+        const fetchBookingsButton = document.getElementById("fetch-bookings");
+        const bookingList = document.getElementById("booking-list");
+
+        // Add event listener for fetching bookings
+        fetchBookingsButton.addEventListener("click", function () {
+            const email = emailInput.value.trim(); // Get the email input value
+
+            
+
+            // Clear the booking list before fetching new bookings
+            bookingList.innerHTML = "<p>Loading your bookings...</p>";
+
+            // Fetch bookings for the entered email
+            fetch(`/bookings/${encodeURIComponent(email)}`)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch bookings. Please check your email.");
+                    }
+                    return response.json();
+                })
+                .then((bookings) => {
+                    bookingList.innerHTML = ""; // Clear the loading message
+
+                    if (bookings.length === 0) {
+                        bookingList.innerHTML = "<p>No bookings found for this email.</p>";
+                        return;
+                    }
+
+                    bookings.forEach((booking) => {
+                        const bookingItem = document.createElement("div");
+                        bookingItem.className = "booking-item";
+                        bookingItem.innerHTML = `
+                            <p><strong>Room Type:</strong> ${booking.room_type}</p>
+                            <p><strong>Check-In:</strong> ${booking.checkin_date}</p>
+                            <p><strong>Check-Out:</strong> ${booking.checkout_date}</p>
+                            <p><strong>Guests:</strong> ${booking.guests}</p>
+                            <button class="update-btn" data-id="${booking.id}">Update</button>
+                            <button class="delete-btn" data-id="${booking.id}">Delete</button>
+                        `;
+                        bookingList.appendChild(bookingItem);
+                    });
+
+                    // Attach event listeners to Update/Delete buttons
+                    document.querySelectorAll(".update-btn").forEach((btn) => {
+                        btn.addEventListener("click", handleUpdate);
+                    });
+                    document.querySelectorAll(".delete-btn").forEach((btn) => {
+                        btn.addEventListener("click", handleDelete);
+                    });
+                })
+                .catch((error) => {
+                    bookingList.innerHTML = `<p>Error: ${error.message}</p>`;
+                });
+        });
+
+        // Handle booking update
+        function handleUpdate(event) {
+            const id = event.target.dataset.id;
+            const newCheckin = prompt("Enter new check-in date (YYYY-MM-DD):");
+            const newCheckout = prompt("Enter new check-out date (YYYY-MM-DD):");
+            const newRoomType = prompt("Enter new room type:");
+            const newGuests = prompt("Enter number of guests:");
+
+            if (newCheckin && newCheckout && newRoomType && newGuests) {
+                fetch(`/bookings/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        checkin: newCheckin,
+                        checkout: newCheckout,
+                        roomType: newRoomType,
+                        guests: parseInt(newGuests),
+                    }),
+                })
+                    .then((response) => response.text())
+                    .then((message) => {
+                        alert(message);
+                        location.reload(); // Refresh the bookings list
+                    });
+            }
+        }
+
+        // Handle booking delete
+        function handleDelete(event) {
+            const id = event.target.dataset.id;
+
+            if (confirm("Are you sure you want to delete this booking?")) {
+                fetch(`/bookings/${id}`, {
+                    method: "DELETE",
+                })
+                    .then((response) => response.text())
+                    .then((message) => {
+                        alert(message);
+                        location.reload(); // Refresh the bookings list
+                    });
+            }
+        }
+    });
+</script>
 </html>

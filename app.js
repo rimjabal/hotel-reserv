@@ -158,6 +158,111 @@ app.post('/submit-contact', encoder, (req, res) => {
     });
 });
 
+// Fetch all bookings for a user
+app.get("/bookings/:email", function (req, res) {
+    const email = req.params.email;
+
+    connection.query(
+        "SELECT * FROM booking WHERE email = ?",
+        [email],
+        function (error, results) {
+            if (error) {
+                console.error("Error fetching bookings:", error);
+                res.status(500).send("Server error");
+                return;
+            }
+            res.json(results);
+        }
+    );
+});
+
+// Update a booking
+app.put("/bookings/:id", encoder, function (req, res) {
+    const id = req.params.id;
+    const { checkin, checkout, roomType, guests } = req.body;
+
+    connection.query(
+        "UPDATE booking SET checkin_date = ?, checkout_date = ?, room_type = ?, guests = ? WHERE id = ?",
+        [checkin, checkout, roomType, guests, id],
+        function (error) {
+            if (error) {
+                console.error("Error updating booking:", error);
+                res.status(500).send("Server error");
+                return;
+            }
+            res.send("Booking updated successfully");
+        }
+    );
+});
+
+// Delete a booking
+app.delete("/bookings/:id", function (req, res) {
+    const id = req.params.id;
+
+    connection.query(
+        "DELETE FROM booking WHERE id = ?",
+        [id],
+        function (error) {
+            if (error) {
+                console.error("Error deleting booking:", error);
+                res.status(500).send("Server error");
+                return;
+            }
+            res.send("Booking deleted successfully");
+        }
+    );
+});
+
+// Fetch all bookings (Admin)
+app.get("/admin/bookings", function (req, res) {
+    connection.query("SELECT * FROM booking", function (error, results) {
+        if (error) {
+            console.error("Error fetching bookings:", error);
+            res.status(500).send("Server error");
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// Update a booking (Admin)
+app.put("/admin/bookings/:id", encoder, function (req, res) {
+    const id = req.params.id;
+    const { name, email, checkin, checkout, roomType, guests } = req.body;
+
+    connection.query(
+        "UPDATE booking SET name = ?, email = ?, checkin_date = ?, checkout_date = ?, room_type = ?, guests = ? WHERE id = ?",
+        [name, email, checkin, checkout, roomType, guests, id],
+        function (error) {
+            if (error) {
+                console.error("Error updating booking:", error);
+                res.status(500).send("Server error");
+                return;
+            }
+            res.send("Booking updated successfully");
+        }
+    );
+});
+
+// Delete a booking (Admin)
+app.delete("/admin/bookings/:id", function (req, res) {
+    const id = req.params.id;
+
+    connection.query(
+        "DELETE FROM booking WHERE id = ?",
+        [id],
+        function (error) {
+            if (error) {
+                console.error("Error deleting booking:", error);
+                res.status(500).send("Server error");
+                return;
+            }
+            res.send("Booking deleted successfully");
+        }
+    );
+});
+
+
 // Start the server on port 4000
 app.listen(4000, function () {
     console.log("Server is running on port 4000...");
