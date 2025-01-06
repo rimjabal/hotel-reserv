@@ -2,7 +2,6 @@ const mysql = require("mysql");
 const express = require("express");
 const bodyParser = require("body-parser");
 const encoder = bodyParser.urlencoded({ extended: true });
-
 const app = express();
 
 // Serve static files from 'assets' and 'images' folder
@@ -41,6 +40,12 @@ app.post("/", encoder, function (req, res) {
         return res.redirect("/");
     }
 
+    // Check for admin credentials
+    if (username === "admin" && password === "admin111") {
+        return res.redirect("/admin/dashboard");
+    }
+
+    // Check for regular user credentials
     connection.query(
         "SELECT * FROM loginuser WHERE username = ? AND password = ?",
         [username, password],
@@ -50,7 +55,6 @@ app.post("/", encoder, function (req, res) {
                 res.status(500).send("Server error");
                 return;
             }
-
             if (results.length > 0) {
                 res.redirect("/welcome");
             } else {
@@ -83,7 +87,6 @@ app.post("/signup", encoder, function (req, res) {
                 res.status(500).send("Server error");
                 return;
             }
-
             if (results.length > 0) {
                 res.send("Username already exists. Please try another one.");
             } else {
@@ -109,113 +112,26 @@ app.get("/welcome", function (req, res) {
     res.sendFile(__dirname + "/welcome.html");
 });
 
-// Route for booking page
-app.get("/book", function (req, res) {
-    res.sendFile(__dirname + "/welcome.html");
+// Admin dashboard route
+app.get("/admin/dashboard", function(req,res){
+   res.sendFile(__dirname + "/admin_dashboard.html"); 
 });
 
-// POST route to handle booking form submission
-app.post("/book", encoder, function (req, res) {
-    var name = req.body.name;
-    var email = req.body.email;
-    var checkin = req.body.checkin;
-    var checkout = req.body.checkout;
-    var roomType = req.body['room-type'];
-    var guests = req.body.guests;
-
-    if (!name || !email || !checkin || !checkout || !roomType || !guests) {
-        return res.redirect("/book");
-    }
-
-    connection.query(
-        "INSERT INTO booking (name, email, checkin_date, checkout_date, room_type, guests) VALUES (?, ?, ?, ?, ?, ?)",
-        [name, email, checkin, checkout, roomType, guests],
-        function (insertError) {
-            if (insertError) {
-                console.error("Error inserting booking data:", insertError);
-                res.status(500).send("Server error");
-                return;
-            }
-            res.redirect("/book?success=true");
+// Fetch all users (Admin)
+app.get("/admin/users", function(req, res) {
+    connection.query("SELECT * FROM loginuser", function(error, results) {
+        if (error) {
+            console.error("Error fetching users:", error);
+            res.status(500).send("Server error");
+            return;
         }
-    );
-});
-
-// Route to handle contact form submission
-app.post('/submit-contact', encoder, (req, res) => {
-    const { name, email, subject, message } = req.body;
-
-    // SQL query to insert data into 'messages' table
-    const query = 'INSERT INTO messages (name, email, subject, message) VALUES (?, ?, ?, ?)';
-    
-    connection.query(query, [name, email, subject, message], (err) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).send('There was an error processing your request');
-        }
-        console.log('Message stored in database');
-        res.send('Message sent successfully!');
+        res.json(results);
     });
 });
 
-// Fetch all bookings for a user
-app.get("/bookings/:email", function (req, res) {
-    const email = req.params.email;
-
-    connection.query(
-        "SELECT * FROM booking WHERE email = ?",
-        [email],
-        function (error, results) {
-            if (error) {
-                console.error("Error fetching bookings:", error);
-                res.status(500).send("Server error");
-                return;
-            }
-            res.json(results);
-        }
-    );
-});
-
-// Update a booking
-app.put("/bookings/:id", encoder, function (req, res) {
-    const id = req.params.id;
-    const { checkin, checkout, roomType, guests } = req.body;
-
-    connection.query(
-        "UPDATE booking SET checkin_date = ?, checkout_date = ?, room_type = ?, guests = ? WHERE id = ?",
-        [checkin, checkout, roomType, guests, id],
-        function (error) {
-            if (error) {
-                console.error("Error updating booking:", error);
-                res.status(500).send("Server error");
-                return;
-            }
-            res.send("Booking updated successfully");
-        }
-    );
-});
-
-// Delete a booking
-app.delete("/bookings/:id", function (req, res) {
-    const id = req.params.id;
-
-    connection.query(
-        "DELETE FROM booking WHERE id = ?",
-        [id],
-        function (error) {
-            if (error) {
-                console.error("Error deleting booking:", error);
-                res.status(500).send("Server error");
-                return;
-            }
-            res.send("Booking deleted successfully");
-        }
-    );
-});
-
-// Fetch all bookings (Admin)
-app.get("/admin/bookings", function (req, res) {
-    connection.query("SELECT * FROM booking", function (error, results) {
+// Fetch all bookings for admin
+app.get("/admin/bookings", function(req, res) {
+    connection.query("SELECT * FROM booking", function(error, results) {
         if (error) {
             console.error("Error fetching bookings:", error);
             res.status(500).send("Server error");
@@ -225,45 +141,78 @@ app.get("/admin/bookings", function (req, res) {
     });
 });
 
-// Update a booking (Admin)
-app.put("/admin/bookings/:id", encoder, function (req, res) {
-    const id = req.params.id;
-    const { name, email, checkin, checkout, roomType, guests } = req.body;
+// Confirm a reservation by admin
+app.post("/admin/confirm/:id", function(req,res){
+   const id=req.params.id; 
+   connection.query(
+       "UPDATE booking SET status='confirmed' WHERE id=?",[id],function(error){
+           if(error){
+               console.error(error);
+               return res.status(500).send('Server Error');
+           }
+           return res.send('Reservation confirmed');
+       });
+});
 
+// Refuse a reservation by admin
+app.post("/admin/refuse/:id",function(req,res){
+   const id=req.params.id; 
+   connection.query(
+       "UPDATE booking SET status='refused' WHERE id=?",[id],function(error){
+           if(error){
+               console.error(error);
+               return res.status(500).send('Server Error');
+           }
+           return res.send('Reservation refused');
+       });
+});
+// Fetch all users (Admin)
+app.get("/admin/users", function(req, res) {
+    connection.query("SELECT * FROM loginuser", function(error, results) {
+        if (error) {
+            console.error("Error fetching users:", error);
+            res.status(500).send("Server error");
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// Update a user (Admin)
+app.put("/admin/users/:id", encoder, function(req, res) {
+    const id = req.params.id;
+    const { username, password } = req.body; // Assuming you want to update username and password
     connection.query(
-        "UPDATE booking SET name = ?, email = ?, checkin_date = ?, checkout_date = ?, room_type = ?, guests = ? WHERE id = ?",
-        [name, email, checkin, checkout, roomType, guests, id],
-        function (error) {
+        "UPDATE loginuser SET username = ?, password = ? WHERE id = ?", 
+        [username, password, id], 
+        function(error) {
             if (error) {
-                console.error("Error updating booking:", error);
+                console.error("Error updating user:", error);
                 res.status(500).send("Server error");
                 return;
             }
-            res.send("Booking updated successfully");
+            res.send("User updated successfully");
         }
     );
 });
 
-// Delete a booking (Admin)
-app.delete("/admin/bookings/:id", function (req, res) {
+// Delete a user (Admin)
+app.delete("/admin/users/:id", function(req, res) {
     const id = req.params.id;
-
     connection.query(
-        "DELETE FROM booking WHERE id = ?",
-        [id],
-        function (error) {
+        "DELETE FROM loginuser WHERE id = ?", 
+        [id], 
+        function(error) {
             if (error) {
-                console.error("Error deleting booking:", error);
+                console.error("Error deleting user:", error);
                 res.status(500).send("Server error");
                 return;
             }
-            res.send("Booking deleted successfully");
+            res.send("User deleted successfully");
         }
     );
 });
-
-
 // Start the server on port 4000
-app.listen(4000, function () {
-    console.log("Server is running on port 4000...");
+app.listen(4000,function(){
+   console.log("Server is running on port 4000..."); 
 });

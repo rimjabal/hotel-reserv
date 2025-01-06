@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+#user-management {
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+#addUserForm {
+    margin-bottom: 20px;
+}
+
+#addUserForm label {
+    display: block;
+    margin: 5px 0;
+}
+
+#addUserForm input {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+}
+
+#addUserForm button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#addUserForm button:hover {
+    background-color: #0056b3;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+button {
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.update-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+.update-btn:hover {
+    background-color: #0056b3;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}

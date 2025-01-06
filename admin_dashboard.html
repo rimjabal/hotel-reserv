@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        section {
+            padding: 20px;
+            margin: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="#user-management">User Management</a></li>
+                <li><a href="#reservation-management">Manage Reservations</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="user-management">
+        <h2>User Management</h2>
+        <button onclick="loadUsers()">Load Users</button>
+        <table id="user-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Actions</th> <!-- Added Actions column -->
+                </tr>
+            </thead>
+            <tbody id="user-list">
+                <!-- User data will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </section>
+
+    <section id="reservation-management">
+        <h2>Manage Reservations</h2>
+        <button onclick="loadReservations()">Load Reservations</button>
+        <table id="reservation-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Check-in Date</th>
+                    <th>Check-out Date</th>
+                    <th>Status</th>
+                    <th>Actions</th> <!-- Added Actions column -->
+                </tr>
+            </thead>
+            <tbody id="reservation-list">
+                <!-- Reservation data will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Your Company Name</p>
+    </footer>
+
+    <script>
+        function loadUsers() {
+            fetch('/admin/users')
+                .then(response => response.json())
+                .then(data => {
+                    const userList = document.getElementById('user-list');
+                    userList.innerHTML = '';
+                    data.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${user.username}</td>
+                            <td>${user.password}</td>
+                            <td>
+                                <button onclick="updateUser(${user.id})">Update</button>
+                                <button onclick="deleteUser(${user.id})">Delete</button>
+                            </td>
+                        `;
+                        userList.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error loading users:', error));
+        }
+
+        function updateUser(id) {
+            const newUsername = prompt("Enter new username:");
+            const newPassword = prompt("Enter new password:");
+            
+            if (newUsername && newPassword) {
+                fetch(`/admin/users/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: newUsername, password: newPassword })
+                })
+                .then(response => response.text())
+                .then(message => alert(message))
+                .catch(error => console.error('Error updating user:', error));
+            }
+        }
+
+        function deleteUser(id) {
+            if (confirm("Are you sure you want to delete this user?")) {
+                fetch(`/admin/users/${id}`, { method: 'DELETE' })
+                    .then(response => response.text())
+                    .then(message => alert(message))
+                    .catch(error => console.error('Error deleting user:', error));
+            }
+        }
+
+        function loadReservations() {
+            fetch('/admin/bookings')
+                .then(response => response.json())
+                .then(data => {
+                    const reservationList = document.getElementById('reservation-list');
+                    reservationList.innerHTML = '';
+                    data.forEach(reservation => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${reservation.name}</td>
+                            <td>${reservation.checkin_date}</td>
+                            <td>${reservation.checkout_date}</td>
+                            <td>${reservation.status}</td>
+                            <td><button onclick="confirmReservation(${reservation.id})">Confirm</button>
+                                <button onclick="refuseReservation(${reservation.id})">Refuse</button></td>
+                        `;
+                        reservationList.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error loading reservations:', error));
+        }
+
+        function confirmReservation(id) {
+            fetch(`/admin/confirm/${id}`, { method: 'POST' })
+                .then(response => response.text())
+                .then(message => alert(message))
+                .catch(error => console.error('Error confirming reservation:', error));
+        }
+
+        function refuseReservation(id) {
+            fetch(`/admin/refuse/${id}`, { method: 'POST' })
+                .then(response => response.text())
+                .then(message => alert(message))
+                .catch(error => console.error('Error refusing reservation:', error));
+        }
+    </script>
+
+</body>
+</html>
