@@ -117,6 +117,38 @@ app.get("/admin/dashboard", function(req,res){
    res.sendFile(__dirname + "/admin_dashboard.html"); 
 });
 
+// Route for the booking page
+app.get("/book", function (req, res) {
+    res.sendFile(__dirname + "/welcome.html");
+});
+
+// POST route to handle booking form submission
+app.post("/book", encoder, function (req, res) {
+    var name = req.body.name;
+    var email = req.body.email;
+    var checkin = req.body.checkin;
+    var checkout = req.body.checkout;
+    var roomType = req.body['room-type'];
+    var guests = req.body.guests;
+
+    if (!name || !email || !checkin || !checkout || !roomType || !guests) {
+        return res.redirect("/book");
+    }
+
+    connection.query(
+        "INSERT INTO booking (name, email, checkin_date, checkout_date, room_type, guests) VALUES (?, ?, ?, ?, ?, ?)",
+        [name, email, checkin, checkout, roomType, guests],
+        function (insertError) {
+            if (insertError) {
+                console.error("Error inserting booking data:", insertError);
+                res.status(500).send("Server error");
+                return;
+            }
+            res.redirect("/book?success=true");
+        }
+    );
+});
+
 // Fetch all users (Admin)
 app.get("/admin/users", function(req, res) {
     connection.query("SELECT * FROM loginuser", function(error, results) {
@@ -166,6 +198,7 @@ app.post("/admin/refuse/:id",function(req,res){
            return res.send('Reservation refused');
        });
 });
+
 // Fetch all users (Admin)
 app.get("/admin/users", function(req, res) {
     connection.query("SELECT * FROM loginuser", function(error, results) {
@@ -212,6 +245,37 @@ app.delete("/admin/users/:id", function(req, res) {
         }
     );
 });
+
+// Route to fetch bookings by email
+app.get("/bookings/:email", function (req, res) {
+    const email = req.params.email;
+    connection.query(
+        "SELECT * FROM booking WHERE email = ?",
+        [email],
+        function (error, results) {
+            if (error) {
+                console.error("Error fetching bookings:", error);
+                res.status(500).send("Server error");
+                return;
+            }
+            res.json(results);
+        }
+    );
+});
+
+// POST route to handle contact form submission
+app.post("/submit-contact", encoder, function (req, res) {
+    const { name, email, subject, message } = req.body;
+
+    if (!name || !email || !subject || !message) {
+        return res.status(400).send("All fields are required.");
+    }
+
+    // Here you can add code to save the contact form data to the database or send an email
+
+    res.send("Thank you for contacting us. We will get back to you shortly.");
+});
+
 // Start the server on port 4000
 app.listen(4000,function(){
    console.log("Server is running on port 4000..."); 
